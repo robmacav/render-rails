@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: %i[ show edit update destroy ]
+  before_action :set_item, only: %i[ show update destroy ]
 
   def index
     @items = Item.all
@@ -14,31 +14,23 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
 
-    respond_to do |format|
-      if @item.save
-        format.json { render :show, status: :created, location: @item }
-      else
-        format.json { render json: @item.errors, status: :unprocessable_entity }
-      end
+    if @item.save
+      render json: @item, status: :created, location: @item
+    else
+      render json: @item.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      if @item.update(item_params)
-        format.json { render :show, status: :ok, location: @item }
-      else
-        format.json { render json: @item.errors, status: :unprocessable_entity }
-      end
+    if @item.update(item_params)
+      render json: @item
+    else
+      render json: @item.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
     @item.destroy
-
-    respond_to do |format|
-      format.json { head :no_content }
-    end
   end
 
   private
@@ -47,6 +39,6 @@ class ItemsController < ApplicationController
     end
 
     def item_params
-      params.require(:item).permit(:description)
+      params.require(:item).permit(:description, :limit, :user_id)
     end
 end
