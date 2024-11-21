@@ -9,6 +9,7 @@ development:
 
 production:
   <<: *default
+  host: aws-0-us-west-1.pooler.supabase.com
   database: postgres
   username: postgres.wyrpppixxamwwhpoayqe
   password: yTHqjoZhs7TxQVNK
